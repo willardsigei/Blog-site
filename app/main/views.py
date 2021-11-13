@@ -68,3 +68,42 @@ def update_profile(uname):
         return redirect(url_for('.profile',uname=user.username))
 
     return render_template('profile/update.html',form =form)
+
+
+
+@main.route('/blog/newBlog',methods = ['GET','POST'])
+@login_required
+def newBlog():
+    blogForm = BlogForm()
+    if blogForm.validate_on_submit():
+        titleBlog=blogForm.blogTitle.data
+        description = blogForm.blogDescription.data
+        newBlog = Blog(title_blog=titleBlog, description=description, user= current_user)
+        newBlog.save_blog()
+        return redirect(url_for('main.allBlogs'))
+    title = 'New Blog'
+    return render_template('new_blogs.html', title=title, blog_form=blogForm)
+@main.route('/blog/allblogs', methods=['GET', 'POST'])
+@login_required
+def allBlogs():
+    blogs = Blog.get_all_blogs()
+    return render_template('blogs.html', blogs=blogs)
+
+
+@main.route('/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def deleteComment(id):
+    comment =Comment.query.get_or_404(id)
+    db.session.delete(comment)
+    db.session.commit()
+    flash('comment succesfully deleted')
+    return redirect (url_for('main.allBlogs'))
+
+
+@main.route('/deleteblog/<int:id>', methods=['GET', 'POST'])
+@login_required
+def deleteBlog(id):
+    blog = Blog.query.get_or_404(id)
+    db.session.delete(blog)
+    db.session.commit()
+    return redirect(url_for('main.allBlogs'))   
