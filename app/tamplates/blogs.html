@@ -1,0 +1,22 @@
+{% extends 'base.html'%}
+{% import 'bootstrap/wtf.html' as wtf%}
+{% block content %}
+<div class="container">
+<div class="row">
+<div class="col-md-2"> </div>
+<div class="col-md-8 mt-3 p-5">
+    <h3 class="mt-3 pb-3 text-center">All blogs</h3>
+    <hr>
+    {% for blog in blogs %}
+    <p>{{blog.title_blog}}</p>
+    <p>{{blog.description}}</p>
+    <div class="row">
+        <a href="{{url_for('main.newComment',id=blog.id)}}"><i class="fas fa-comment fa-fw pr-3" style='font-size:36px'></i>Comment</a>
+        <a href="{{url_for('main.deleteBlog', id = blog.id)}}"><i class="fas fa-trash text-danger" style='font-size:36px'></i>Delete</a>
+    </div>
+    {%endfor%}
+</div>
+
+</div>
+</div>
+{% endblock%}
